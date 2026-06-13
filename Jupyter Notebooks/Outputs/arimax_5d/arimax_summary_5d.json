@@ -1,0 +1,54 @@
+{
+  "model": "ARIMAX",
+  "target": "TARGET_5D",
+  "selection_rule": "best order selected by validation MAE; RMSE and DA used as secondary checks",
+  "best_order": [
+    0,
+    0,
+    1
+  ],
+  "best_trend": "c",
+  "best_package": "FULL",
+  "best_exog_cols": [
+    "DXY_RET",
+    "SP500_RET",
+    "OIL_RET",
+    "US10Y_CHANGE",
+    "VIX_LEVEL"
+  ],
+  "validation_metrics_best_package": {
+    "MAE": 0.014189792752942201,
+    "RMSE": 0.018560449036479302,
+    "DA": 0.592
+  },
+  "test_metrics": {
+    "MAE": 0.0205877952101346,
+    "RMSE": 0.02667556254144901,
+    "DA": 0.510934393638171
+  },
+  "benchmark_metrics": {
+    "ZERO": {
+      "MAE": 0.019073226237947348,
+      "RMSE": 0.024537504729923987,
+      "DA": 0.34592445328031807
+    },
+    "PERSISTENCE": {
+      "MAE": 0.026169609523394383,
+      "RMSE": 0.03455047319397033,
+      "DA": 0.5308151093439364
+    }
+  },
+  "row_counts": {
+    "train": 3263,
+    "validation": 250,
+    "test": 503,
+    "train_plus_validation": 3513
+  },
+  "files": {
+    "stage_a_results": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\arimax_5d\\stage_a_order_search_arimax_5d.csv",
+    "stage_b_results": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\arimax_5d\\stage_b_ablation_arimax_5d.csv",
+    "validation_predictions": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\arimax_5d\\arimax_validation_predictions_5d.csv",
+    "test_predictions": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\arimax_5d\\arimax_test_predictions_5d.csv",
+    "benchmarks": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\arimax_5d\\arimax_benchmarks_5d.csv"
+  }
+}

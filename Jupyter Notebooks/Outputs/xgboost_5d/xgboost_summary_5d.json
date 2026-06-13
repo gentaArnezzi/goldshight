@@ -1,0 +1,111 @@
+{
+  "model": "XGBoost",
+  "target": "TARGET_5D",
+  "target_scale": 100.0,
+  "selection_rule": "best hyperparameters selected by Optuna using TimeSeriesSplit CV MAE; RMSE and DA used as secondary checks",
+  "n_trials": 100,
+  "n_splits": 5,
+  "gap": 5,
+  "best_params": {
+    "n_estimators": 300,
+    "learning_rate": 0.005352757467945076,
+    "max_depth": 2,
+    "min_child_weight": 2,
+    "subsample": 0.7533935236147858,
+    "colsample_bytree": 0.6365517758073783,
+    "gamma": 0.3624613769935243,
+    "reg_alpha": 0.9925499714722436,
+    "reg_lambda": 0.5678899037764856
+  },
+  "best_package": "NO_G3",
+  "best_feature_cols": [
+    "GOLD_RET",
+    "GOLD_RET_LAG1",
+    "GOLD_RET_LAG2",
+    "GOLD_RET_LAG3",
+    "GOLD_RET_LAG4",
+    "GOLD_RET_LAG5",
+    "GOLD_RET_LAG6",
+    "GOLD_RET_LAG7",
+    "DXY_RET",
+    "DXY_RET_LAG1",
+    "DXY_RET_LAG2",
+    "DXY_RET_LAG3",
+    "DXY_RET_LAG4",
+    "DXY_RET_LAG5",
+    "DXY_RET_LAG6",
+    "DXY_RET_LAG7",
+    "SP500_RET",
+    "SP500_RET_LAG1",
+    "SP500_RET_LAG2",
+    "SP500_RET_LAG3",
+    "SP500_RET_LAG4",
+    "SP500_RET_LAG5",
+    "SP500_RET_LAG6",
+    "SP500_RET_LAG7",
+    "US10Y_CHANGE",
+    "US10Y_CHANGE_LAG1",
+    "US10Y_CHANGE_LAG2",
+    "US10Y_CHANGE_LAG3",
+    "US10Y_CHANGE_LAG4",
+    "US10Y_CHANGE_LAG5",
+    "US10Y_CHANGE_LAG6",
+    "US10Y_CHANGE_LAG7",
+    "VIX_LEVEL",
+    "VIX_LEVEL_LAG1",
+    "VIX_LEVEL_LAG2",
+    "VIX_LEVEL_LAG3",
+    "VIX_LEVEL_LAG4",
+    "VIX_LEVEL_LAG5",
+    "VIX_LEVEL_LAG6",
+    "VIX_LEVEL_LAG7"
+  ],
+  "validation_metrics_best_package": {
+    "MAE": 0.014774502767553752,
+    "RMSE": 0.018681644537163596,
+    "DA": 0.52
+  },
+  "test_metrics": {
+    "MAE": 0.018766800110805774,
+    "RMSE": 0.02421417678564666,
+    "DA": 0.6500994035785288
+  },
+  "benchmark_metrics": {
+    "ZERO": {
+      "MAE": 0.019073226237947348,
+      "RMSE": 0.024537504729923987,
+      "DA": 0.34592445328031807
+    },
+    "PERSISTENCE": {
+      "MAE": 0.026169609523394383,
+      "RMSE": 0.03455047319397033,
+      "DA": 0.5308151093439364
+    }
+  },
+  "row_counts": {
+    "train": 3256,
+    "validation": 250,
+    "test": 503,
+    "train_plus_validation": 3506
+  },
+  "diagnostics": {
+    "final_test": {
+      "label": "Final Test",
+      "pred_mean": 0.0008918800158426166,
+      "pred_std": 0.0010910016717389226,
+      "pred_min": -0.008081885986030102,
+      "pred_max": 0.012302079237997532,
+      "unique_pred_count_rounded_10": 485,
+      "feature_importance_sum": 1.0,
+      "nonzero_feature_importance_count": 40
+    }
+  },
+  "files": {
+    "stage_a_results": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\xgboost_5d\\stage_a_optuna_xgboost_5d.csv",
+    "stage_b_results": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\xgboost_5d\\stage_b_ablation_xgboost_5d.csv",
+    "validation_predictions": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\xgboost_5d\\xgboost_validation_predictions_5d.csv",
+    "test_predictions": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\xgboost_5d\\xgboost_test_predictions_5d.csv",
+    "benchmarks": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\xgboost_5d\\xgboost_benchmarks_5d.csv",
+    "feature_importance": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\xgboost_5d\\xgboost_feature_importance_5d.csv"
+  }
+}

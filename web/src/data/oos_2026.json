@@ -1,0 +1,18 @@
+{
+  "lastUpdated": "2026-06-12T22:45:05.264Z",
+  "dataAsOf": "2026-06-12",
+  "predictions": [],
+  "aggregateMetrics": {
+    "nObservations": 0,
+    "xgboost": {
+      "mae": null,
+      "rmse": null,
+      "da": null
+    },
+    "lstm": {
+      "mae": null,
+      "rmse": null,
+      "da": null
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "model": "LSTM",
+  "target": "TARGET_5D",
+  "window": 7,
+  "selection_rule": "best LSTM configuration selected by validation MAE; RMSE and DA used as secondary checks",
+  "scaling_policy": "StandardScaler fitted on train only for Stage A/B; fitted on train+validation for final test",
+  "loss": "Huber",
+  "batch_size": 16,
+  "max_epochs": 150,
+  "best_config": {
+    "config_name": "MEDIUM_LR_001",
+    "architecture": "MEDIUM",
+    "learning_rate": 0.001,
+    "loss": "Huber"
+  },
+  "best_package": "NO_G3",
+  "best_base_features": [
+    "GOLD_RET",
+    "DXY_RET",
+    "SP500_RET",
+    "US10Y_CHANGE",
+    "VIX_LEVEL"
+  ],
+  "best_sequence_feature_cols": [
+    "GOLD_RET_T0",
+    "DXY_RET_T0",
+    "SP500_RET_T0",
+    "US10Y_CHANGE_T0",
+    "VIX_LEVEL_T0",
+    "GOLD_RET_T1",
+    "DXY_RET_T1",
+    "SP500_RET_T1",
+    "US10Y_CHANGE_T1",
+    "VIX_LEVEL_T1",
+    "GOLD_RET_T2",
+    "DXY_RET_T2",
+    "SP500_RET_T2",
+    "US10Y_CHANGE_T2",
+    "VIX_LEVEL_T2",
+    "GOLD_RET_T3",
+    "DXY_RET_T3",
+    "SP500_RET_T3",
+    "US10Y_CHANGE_T3",
+    "VIX_LEVEL_T3",
+    "GOLD_RET_T4",
+    "DXY_RET_T4",
+    "SP500_RET_T4",
+    "US10Y_CHANGE_T4",
+    "VIX_LEVEL_T4",
+    "GOLD_RET_T5",
+    "DXY_RET_T5",
+    "SP500_RET_T5",
+    "US10Y_CHANGE_T5",
+    "VIX_LEVEL_T5",
+    "GOLD_RET_T6",
+    "DXY_RET_T6",
+    "SP500_RET_T6",
+    "US10Y_CHANGE_T6",
+    "VIX_LEVEL_T6"
+  ],
+  "best_epochs": 14,
+  "validation_metrics_best_package": {
+    "MAE": 0.014632944791553065,
+    "RMSE": 0.01873093042223123,
+    "DA": 0.544
+  },
+  "test_metrics": {
+    "MAE": 0.018761315681345852,
+    "RMSE": 0.024230955507776698,
+    "DA": 0.6043737574552683
+  },
+  "benchmark_metrics": {
+    "ZERO": {
+      "MAE": 0.019073226237947348,
+      "RMSE": 0.024537504729923987,
+      "DA": 0.34592445328031807
+    },
+    "PERSISTENCE": {
+      "MAE": 0.026169609523394383,
+      "RMSE": 0.03455047319397033,
+      "DA": 0.5308151093439364
+    }
+  },
+  "diagnostics": {
+    "final_test": {
+      "label": "Final Test",
+      "pred_mean": 0.0008215774432756007,
+      "pred_std": 0.0038364308420568705,
+      "pred_min": -0.025062330067157745,
+      "pred_max": 0.017713891342282295,
+      "unique_pred_count_rounded_10": 503,
+      "positive_pred_ratio": 0.6719681908548708,
+      "positive_actual_ratio": 0.6540755467196819
+    }
+  },
+  "row_counts": {
+    "train": 3257,
+    "validation": 250,
+    "test": 503,
+    "train_plus_validation": 3507
+  },
+  "files": {
+    "stage_a_results": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\lstm_5d\\stage_a_lstm_model_development_5d.csv",
+    "stage_a_predictions": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\lstm_5d\\lstm_stage_a_validation_predictions_5d.csv",
+    "stage_b_results": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\lstm_5d\\stage_b_ablation_lstm_5d.csv",
+    "stage_b_predictions": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\lstm_5d\\lstm_validation_predictions_5d.csv",
+    "stage_b_diagnostics": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\lstm_5d\\stage_b_diagnostics_lstm_5d.csv",
+    "test_predictions": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\lstm_5d\\lstm_test_predictions_5d.csv",
+    "benchmarks": "C:\\Users\\Afzi\\Documents\\BINUS\\0. SKRIPSI\\gold_forecasting_skripsi\\results\\lstm_5d\\lstm_benchmarks_5d.csv"
+  }
+}
