@@ -18,10 +18,10 @@ warnings.filterwarnings("ignore")
 HORIZON = 5  # 5-trading-day cumulative return
 
 TICKERS = {
-    "GLD": "GOLD",      # Gold ETF (proxy for gold price)
-    "DX-Y.NYB": "DXY",  # US Dollar Index
+    "GC=F": "GOLD",      # Gold Futures
+    "DX-Y.NYB": "DXY",   # US Dollar Index
     "^GSPC": "SP500",    # S&P 500
-    "CL=F": "OIL",      # Crude Oil Futures
+    "CL=F": "OIL",       # Crude Oil Futures
     "^TNX": "US10Y",     # 10-Year Treasury Yield
     "^VIX": "VIX",       # CBOE Volatility Index
 }
