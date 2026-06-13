@@ -34,7 +34,7 @@ export default function HomePage() {
             Comparing <span className="text-foreground font-medium">ARIMAX</span>,{' '}
             <span className="text-foreground font-medium">XGBoost</span>, and{' '}
             <span className="text-foreground font-medium">LSTM</span> for
-            5-Day Cumulative Gold Return Prediction
+            5-Day Cumulative Gold Return Prediction with Macroeconomic Variables
           </p>
 
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
@@ -60,14 +60,15 @@ export default function HomePage() {
                 <Target className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-foreground mb-2">Key Research Conclusion</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  <strong className="text-foreground">LSTM ≈ XGBoost</strong> statistically — both significantly
-                  outperform ARIMAX. However, <strong className="text-foreground">only XGBoost</strong> is
-                  robustly superior to the zero benchmark (DM-test significant at 5%). Predicting 5-day
-                  gold returns remains a <strong className="text-foreground">difficult problem</strong> with
-                  limited improvement over simple benchmarks.
-                </p>
+                <h2 className="text-lg font-semibold text-foreground mb-4">Key Research Conclusion</h2>
+                <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+                  <p>
+                    <strong className="text-foreground">Kesimpulan 1:</strong> Pendekatan Machine Learning (<strong className="text-foreground">LSTM & XGBoost</strong>) secara signifikan mengungguli model ekonometrika tradisional (ARIMAX).
+                  </p>
+                  <p>
+                    <strong className="text-foreground">Kesimpulan 5:</strong> Memprediksi return emas 5 hari ke depan tetap menjadi <strong className="text-foreground">tantangan besar</strong>. Meskipun XGBoost adalah satu-satunya model yang konsisten mengalahkan Zero Benchmark, peningkatan akurasi absolutnya (gain) masih sangat terbatas, mengindikasikan kuatnya dominasi <em>random walk</em> di pasar emas.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -107,12 +108,12 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <BenchmarkCard
               name="Zero Benchmark"
-              description="Predicts 0 (no change)"
+              description="Asumsi Random Walk (Martingale). Memprediksi bahwa harga emas tidak akan berubah (return = 0). Ini adalah baseline paling krusial di pasar keuangan."
               metrics={metrics.zeroBenchmark}
             />
             <BenchmarkCard
-              name="Persistence"
-              description="Predicts previous return"
+              name="Persistence Benchmark"
+              description="Model Naif. Memprediksi bahwa return 5-hari ke depan akan sama persis dengan return 5-hari terakhir (momentum)."
               metrics={metrics.persistenceBenchmark}
             />
           </div>
@@ -120,7 +121,12 @@ export default function HomePage() {
 
         {/* Significance Summary */}
         <section className="mb-12">
-          <h2 className="text-xl font-semibold text-foreground mb-6">Statistical Significance</h2>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-2">
+            <h2 className="text-xl font-semibold text-foreground">Statistical Significance</h2>
+            <p className="text-xs text-muted-foreground max-w-md sm:text-right">
+              *P-value (Nilai-p) dari uji Diebold-Mariano (DM-test). Nilai p &lt; 0.05 menunjukkan perbedaan akurasi antar model signifikan secara statistik.
+            </p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <SignificanceCard
               comparison="LSTM vs XGBoost"
