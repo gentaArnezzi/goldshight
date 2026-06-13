@@ -2,12 +2,13 @@
 
 import { TrendingUp, TrendingDown, Target, BarChart3, ArrowRight, LineChart, Activity, FlaskConical, Info } from 'lucide-react';
 import Link from 'next/link';
-import { getTestSetData, formatDecimal, formatPercent } from '@/lib/data';
+import { getTestSetData, getOOS2026Data, formatDecimal, formatPercent, formatDate } from '@/lib/data';
 import { MODEL_COLORS } from '@/lib/types';
 
 export default function HomePage() {
   const data = getTestSetData();
   const { metrics } = data;
+  const oos = getOOS2026Data();
 
   return (
     <div className="relative">
@@ -40,6 +41,15 @@ export default function HomePage() {
             Interactive visualization of thesis results on the test set (2024–2025)
             with out-of-sample replay on 2026 data.
           </p>
+
+          {oos.lastUpdated && (
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-border/40 bg-muted/30 px-4 py-1.5 text-xs text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+              2026 data last updated: {formatDate(oos.dataAsOf || oos.lastUpdated)}
+              <span className="text-muted-foreground/40">·</span>
+              {oos.aggregateMetrics.nObservations} evaluated predictions
+            </div>
+          )}
         </section>
 
         {/* Key Conclusion Card */}

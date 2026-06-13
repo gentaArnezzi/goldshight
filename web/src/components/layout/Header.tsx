@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BarChart3, LineChart, FlaskConical, Info, Home, Activity } from 'lucide-react';
+import { getOOS2026Data, getDataFreshnessStatus, formatDate } from '@/lib/data';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -12,11 +13,33 @@ const navItems = [
   { href: '/about', label: 'About', icon: Info },
 ];
 
+const FRESHNESS_CONFIG = {
+  green: { bg: 'bg-green-500/10', border: 'border-green-500/20', dot: 'bg-green-400', text: 'text-green-300' },
+  yellow: { bg: 'bg-yellow-500/10', border: 'border-yellow-500/20', dot: 'bg-yellow-400', text: 'text-yellow-300' },
+  red: { bg: 'bg-red-500/10', border: 'border-red-500/20', dot: 'bg-red-400', text: 'text-red-300' },
+} as const;
+
 export default function Header() {
   const pathname = usePathname();
+  const oos = getOOS2026Data();
+  const freshness = oos.lastUpdated ? getDataFreshnessStatus(oos.lastUpdated) : null;
+  const cfg = freshness ? FRESHNESS_CONFIG[freshness] : null;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 glass-card">
+      {/* Data Freshness Banner */}
+      {cfg && oos.lastUpdated && (
+        <div className={`${cfg.bg} border-b ${cfg.border} px-4 py-1.5`}>
+          <div className="mx-auto max-w-7xl flex items-center justify-center gap-2 text-xs">
+            <span className={`inline-block h-1.5 w-1.5 rounded-full ${cfg.dot} animate-pulse`} />
+            <span className={cfg.text}>
+              2026 data last updated: {formatDate(oos.dataAsOf || oos.lastUpdated)}
+              {freshness === 'red' && ' — Data may be stale'}
+              {freshness === 'yellow' && ' — Update pending'}
+            </span>
+          </div>
+        </div>
+      )}
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
