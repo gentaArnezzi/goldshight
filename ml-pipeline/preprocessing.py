@@ -52,11 +52,24 @@ LSTM_WINDOW = 7
 
 def _make_session():
     """
-    Create a curl_cffi session that impersonates Chrome's TLS fingerprint.
-    This bypasses Yahoo Finance's bot detection on cloud/CI environments.
+    Create a requests session pre-warmed with Yahoo cookies.
+    Hitting fc.yahoo.com sets cookies that yfinance needs for TZ lookups.
+    Without these cookies, yfinance fails on CI/cloud environments.
     """
-    from curl_cffi import requests as curl_requests
-    session = curl_requests.Session(impersonate="chrome")
+    import requests as req
+    session = req.Session()
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36"
+        ),
+    })
+    # Pre-warm: fc.yahoo.com returns 404 but sets required cookies
+    try:
+        session.get("https://fc.yahoo.com", timeout=10)
+    except Exception:
+        pass
     return session
 
 
