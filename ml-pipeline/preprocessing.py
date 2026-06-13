@@ -50,6 +50,24 @@ LSTM_WINDOW = 7
 
 # ── Data Collection ─────────────────────────────────────────────────────────
 
+def _make_session():
+    """Create a requests session with browser-like headers to avoid blocks."""
+    import requests
+    session = requests.Session()
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate",
+        "Connection": "keep-alive",
+    })
+    return session
+
+
 def pull_yahoo_data(
     start: str = "2010-01-01",
     end: str | None = None,
@@ -62,37 +80,55 @@ def pull_yahoo_data(
     if end is None:
         end = (datetime.utcnow() + timedelta(days=1)).strftime("%Y-%m-%d")
 
+    session = _make_session()
+    ticker_list = list(TICKERS.keys())
+
     for attempt in range(max_retries):
         try:
+            # Download all tickers in a single batch call
+            raw = yf.download(
+                ticker_list,
+                start=start,
+                end=end,
+                auto_adjust=True,
+                progress=False,
+                group_by="ticker",
+                threads=False,
+                session=session,
+            )
+
+            if raw.empty:
+                raise ValueError("Batch download returned empty DataFrame")
+
+            # Extract Close prices for each ticker
             frames = {}
             for ticker, name in TICKERS.items():
-                df = yf.download(
-                    ticker,
-                    start=start,
-                    end=end,
-                    auto_adjust=True,
-                    progress=False,
-                )
-                if df.empty:
-                    raise ValueError(f"No data returned for {ticker}")
+                try:
+                    if len(ticker_list) > 1:
+                        series = raw[ticker]["Close"]
+                    else:
+                        series = raw["Close"]
+                except KeyError:
+                    raise ValueError(f"Ticker {ticker} not found in download")
 
-                # Handle multi-level columns from yfinance
-                if isinstance(df.columns, pd.MultiIndex):
-                    df.columns = df.columns.get_level_values(0)
+                if series.dropna().empty:
+                    raise ValueError(f"No data for {ticker}")
 
-                frames[name] = df["Close"].rename(name)
+                frames[name] = series.rename(name)
 
             combined = pd.concat(frames.values(), axis=1, join="inner")
             combined = combined.dropna()
             combined = combined.reset_index()
-            combined = combined.rename(columns={"Date": "DATE", "index": "DATE"})
 
-            # Ensure DATE is datetime
-            if "DATE" not in combined.columns:
-                combined = combined.reset_index()
-                combined = combined.rename(columns={combined.columns[0]: "DATE"})
-
+            # Normalize the date column name
+            date_col = combined.columns[0]
+            combined = combined.rename(columns={date_col: "DATE"})
             combined["DATE"] = pd.to_datetime(combined["DATE"])
+
+            # Remove timezone info if present
+            if combined["DATE"].dt.tz is not None:
+                combined["DATE"] = combined["DATE"].dt.tz_localize(None)
+
             combined = combined.sort_values("DATE").reset_index(drop=True)
 
             print(f"  Pulled {len(combined)} trading days "
@@ -102,11 +138,12 @@ def pull_yahoo_data(
         except Exception as e:
             if attempt < max_retries - 1:
                 import time
-                wait = (attempt + 1) * 20
+                wait = (attempt + 1) * 30
                 print(f"  Retry {attempt + 1}/{max_retries} after error: {e}. Waiting {wait}s...")
                 time.sleep(wait)
             else:
                 raise RuntimeError(f"Failed to pull Yahoo data after {max_retries} attempts: {e}")
+
 
 
 # ── Feature Engineering ─────────────────────────────────────────────────────
