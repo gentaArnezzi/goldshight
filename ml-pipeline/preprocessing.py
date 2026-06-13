@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
-import yfinance as yf
 
 warnings.filterwarnings("ignore")
 
@@ -50,27 +49,60 @@ LSTM_WINDOW = 7
 
 # ── Data Collection ─────────────────────────────────────────────────────────
 
-def _make_session():
+def _download_ticker_direct(
+    ticker: str,
+    start: str,
+    end: str,
+    session,
+) -> pd.Series:
     """
-    Create a requests session pre-warmed with Yahoo cookies.
-    Hitting fc.yahoo.com sets cookies that yfinance needs for TZ lookups.
-    Without these cookies, yfinance fails on CI/cloud environments.
+    Download a single ticker directly from Yahoo Finance v8 chart API.
+    Bypasses yfinance entirely to avoid TZ lookup failures on CI.
     """
-    import requests as req
-    session = req.Session()
-    session.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/131.0.0.0 Safari/537.36"
-        ),
-    })
-    # Pre-warm: fc.yahoo.com returns 404 but sets required cookies
-    try:
-        session.get("https://fc.yahoo.com", timeout=10)
-    except Exception:
-        pass
-    return session
+    import time as _time
+
+    url = f"https://query2.finance.yahoo.com/v8/finance/chart/{ticker}"
+
+    start_ts = int(pd.Timestamp(start).timestamp())
+    end_ts = int(pd.Timestamp(end).timestamp())
+
+    params = {
+        "period1": start_ts,
+        "period2": end_ts,
+        "interval": "1d",
+        "includeAdjustedClose": "true",
+    }
+
+    resp = session.get(url, params=params, timeout=30)
+    resp.raise_for_status()
+    data = resp.json()
+
+    if "chart" not in data or data["chart"].get("error"):
+        err_msg = data.get("chart", {}).get("error", {}).get("description", "Unknown error")
+        raise ValueError(f"Yahoo API error for {ticker}: {err_msg}")
+
+    result = data["chart"]["result"]
+    if not result:
+        raise ValueError(f"No chart result for {ticker}")
+
+    result = result[0]
+    timestamps = result.get("timestamp", [])
+    if not timestamps:
+        raise ValueError(f"No timestamps for {ticker}")
+
+    # Use adjclose if available, else close
+    quotes = result["indicators"]["quote"][0]
+    adjclose_list = result["indicators"].get("adjclose", [{}])
+    if adjclose_list and adjclose_list[0].get("adjclose"):
+        prices = adjclose_list[0]["adjclose"]
+    else:
+        prices = quotes["close"]
+
+    dates = pd.to_datetime(timestamps, unit="s", utc=True).tz_localize(None).normalize()
+    series = pd.Series(prices, index=dates, name=ticker, dtype="float64")
+    series = series.dropna()
+
+    return series
 
 
 def pull_yahoo_data(
@@ -79,61 +111,38 @@ def pull_yahoo_data(
     max_retries: int = 3,
 ) -> pd.DataFrame:
     """
-    Pull raw price data from Yahoo Finance.
+    Pull raw price data from Yahoo Finance v8 chart API.
     Returns a DataFrame with columns: DATE, GOLD, DXY, SP500, OIL, US10Y, VIX.
     """
+    import requests as req
+    import time as _time
+
     if end is None:
         end = (datetime.utcnow() + timedelta(days=1)).strftime("%Y-%m-%d")
 
-    session = _make_session()
-    ticker_list = list(TICKERS.keys())
+    session = req.Session()
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36"
+        ),
+    })
 
     for attempt in range(max_retries):
         try:
-            # Download all tickers in a single batch call
-            raw = yf.download(
-                ticker_list,
-                start=start,
-                end=end,
-                auto_adjust=True,
-                progress=False,
-                group_by="ticker",
-                threads=False,
-                session=session,
-            )
-
-            if raw.empty:
-                raise ValueError("Batch download returned empty DataFrame")
-
-            # Extract Close prices for each ticker
             frames = {}
             for ticker, name in TICKERS.items():
-                try:
-                    if len(ticker_list) > 1:
-                        series = raw[ticker]["Close"]
-                    else:
-                        series = raw["Close"]
-                except KeyError:
-                    raise ValueError(f"Ticker {ticker} not found in download")
-
-                if series.dropna().empty:
-                    raise ValueError(f"No data for {ticker}")
-
+                print(f"    Downloading {ticker} -> {name}...")
+                series = _download_ticker_direct(ticker, start, end, session)
                 frames[name] = series.rename(name)
+                _time.sleep(0.5)  # be polite, avoid rate limits
 
             combined = pd.concat(frames.values(), axis=1, join="inner")
             combined = combined.dropna()
             combined = combined.reset_index()
-
-            # Normalize the date column name
-            date_col = combined.columns[0]
-            combined = combined.rename(columns={date_col: "DATE"})
+            combined = combined.rename(columns={"index": "DATE"})
             combined["DATE"] = pd.to_datetime(combined["DATE"])
-
-            # Remove timezone info if present
-            if combined["DATE"].dt.tz is not None:
-                combined["DATE"] = combined["DATE"].dt.tz_localize(None)
-
             combined = combined.sort_values("DATE").reset_index(drop=True)
 
             print(f"  Pulled {len(combined)} trading days "
@@ -142,10 +151,9 @@ def pull_yahoo_data(
 
         except Exception as e:
             if attempt < max_retries - 1:
-                import time
                 wait = (attempt + 1) * 30
                 print(f"  Retry {attempt + 1}/{max_retries} after error: {e}. Waiting {wait}s...")
-                time.sleep(wait)
+                _time.sleep(wait)
             else:
                 raise RuntimeError(f"Failed to pull Yahoo data after {max_retries} attempts: {e}")
 
