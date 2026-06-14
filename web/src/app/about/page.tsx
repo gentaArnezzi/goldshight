@@ -25,11 +25,12 @@ export default function AboutPage() {
             This thesis compares three forecasting approaches — <strong className="text-foreground">ARIMAX</strong>{' '}
             (Autoregressive Integrated Moving Average with Exogenous Variables), <strong className="text-foreground">XGBoost</strong>{' '}
             (Extreme Gradient Boosting), and <strong className="text-foreground">LSTM</strong>{' '}
-            (Long Short-Term Memory) — for predicting the 5-day cumulative return of gold (GLD ETF).
+            (Long Short-Term Memory) — for predicting the 5-day cumulative return of gold (Gold Futures, GC=F).
           </p>
 
           <p>
-            The study employs a <strong className="text-foreground">walk-forward validation</strong> framework on
+            The study employs a <strong className="text-foreground">walk-forward validation</strong> framework 
+            (specifically for ARIMAX) and a fixed train-test split for Machine Learning models on
             daily data spanning January 2010 to December 2025. The data is divided into training (2010–2022),
             validation (2023), and test (2024–2025) periods, with 503 test observations.
           </p>

@@ -94,9 +94,9 @@ export default function AblationPage() {
             <h2 className="font-semibold mb-1">Key Finding</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
               <strong className="text-foreground">NO_G3</strong> (excluding oil/commodity proxy) achieves the
-              best validation MAE for both XGBoost and LSTM. Meanwhile, ARIMAX performs best with the{' '}
-              <strong className="text-foreground">FULL</strong> feature set. This suggests that oil futures
-              returns add noise for ML models but provide useful signal for the linear ARIMAX model.
+              best validation MAE for both XGBoost and LSTM, although the performance difference is marginal (in the 4th/5th decimal). Meanwhile, ARIMAX performs best with the{' '}
+              <strong className="text-foreground">FULL</strong> feature set. This suggests that while oil futures
+              returns provide a useful signal for the linear ARIMAX model, they do not offer a substantial predictive advantage for the ML models in this specific non-causal forecasting setup.
             </p>
           </div>
         </div>
