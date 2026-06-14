@@ -71,20 +71,20 @@ export default function ErrorMagnitudeChart({ predictions, models }: ErrorMagnit
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} opacity={0.4} />
           <XAxis 
             dataKey="name" 
-            stroke="hsl(var(--muted-foreground))" 
-            tick={{ fontSize: 11 }}
+            stroke="oklch(0.25 0.01 250)" 
+            tick={{ fontSize: 11, fill: 'oklch(0.65 0.02 250)' }}
             axisLine={false}
             tickLine={false}
             dy={10}
           />
           <YAxis 
-            stroke="hsl(var(--muted-foreground))" 
-            tick={{ fontSize: 11 }}
+            stroke="oklch(0.25 0.01 250)" 
+            tick={{ fontSize: 11, fill: 'oklch(0.65 0.02 250)' }}
             tickFormatter={(val) => (val * 100).toFixed(1) + '%'}
             axisLine={false}
             tickLine={false}
             dx={-10}
-            label={{ value: 'Mean Absolute Error', angle: -90, position: 'insideLeft', style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 }, dx: -10 }}
+            label={{ value: 'Mean Absolute Error', angle: -90, position: 'insideLeft', style: { fill: 'oklch(0.65 0.02 250)', fontSize: 11 }, dx: -10 }}
           />
           <Tooltip
             cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }}
