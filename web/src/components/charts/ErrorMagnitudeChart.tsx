@@ -39,7 +39,7 @@ export default function ErrorMagnitudeChart({ predictions, models }: ErrorMagnit
     });
 
     const result: any = {
-      name: bucket.label,
+      name: `${bucket.label} (n=${bucketPreds.length})`,
       count: bucketPreds.length,
     };
 
