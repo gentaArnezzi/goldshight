@@ -145,8 +145,6 @@ export default function Replay2026Page() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {(['xgboost', 'lstm'] as const).map((model) => {
                     const oos2026 = oos.aggregateMetrics[model] as { mae: number; rmse: number; da: number };
-                    const test = testSet.metrics[model];
-                    const maeDiff = ((oos2026.mae - test.mae) / test.mae) * 100;
                     return (
                       <div key={model} className="glass-card rounded-2xl p-5">
                         <div className="flex items-center gap-2 mb-4">
@@ -157,9 +155,6 @@ export default function Replay2026Page() {
                           <div>
                             <div className="text-xs text-muted-foreground mb-1">MAE</div>
                             <div className="text-sm font-mono">{formatDecimal(oos2026.mae)}</div>
-                            <div className={`text-[10px] mt-0.5 ${maeDiff > 0 ? 'text-red-400' : 'text-green-400'}`}>
-                              {maeDiff > 0 ? '↑' : '↓'} {Math.abs(maeDiff).toFixed(1)}% vs test
-                            </div>
                           </div>
                           <div>
                             <div className="text-xs text-muted-foreground mb-1">RMSE</div>
