@@ -8,6 +8,7 @@ import {
 import { AlertTriangle, CalendarDays, TrendingUp, Activity } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import QQPlot from '@/components/charts/QQPlot';
 import {
   getOOS2026Data, getTestSetData,
   formatDecimal, formatPercent, formatDate, getDataFreshnessStatus,
@@ -436,6 +437,27 @@ export default function Replay2026Page() {
                     <p className="text-[10px] text-muted-foreground mt-3">
                       Visualisasi diagnostik berdasarkan {evaluatedPredictions.length} observasi; interpretasi terbatas.
                     </p>
+                  </div>
+
+                  {/* Q-Q Plots */}
+                  <div className="glass-card rounded-2xl p-6">
+                    <h2 className="text-lg font-semibold mb-4">Q-Q Plots (Normality of Residuals) — 2026</h2>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {(['xgboost', 'lstm'] as const).map((model) => {
+                        const errKey = model === 'xgboost' ? 'errXgboost' : 'errLstm';
+                        const residuals = evaluatedPredictions
+                          .filter((p) => p[errKey] != null)
+                          .map((p) => p[errKey] as number);
+                        return (
+                          <QQPlot
+                            key={model}
+                            residuals={residuals}
+                            modelName={MODEL_LABELS[model]}
+                            modelKey={model}
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
                 </>
               )}

@@ -8,6 +8,8 @@ import TimelineChart from '@/components/charts/TimelineChart';
 import ErrorDistribution from '@/components/charts/ErrorDistribution';
 import DirectionAccuracy from '@/components/charts/DirectionAccuracy';
 import ResidualPlot from '@/components/charts/ResidualPlot';
+import QQPlot from '@/components/charts/QQPlot';
+import ErrorMagnitudeChart from '@/components/charts/ErrorMagnitudeChart';
 import { getTestSetData, formatDecimal, formatPercent, formatDate, getQuarter } from '@/lib/data';
 import { MODEL_COLORS, MODEL_LABELS, type Prediction, type SignificanceTest } from '@/lib/types';
 
@@ -307,12 +309,48 @@ export default function TestResultsPage() {
               })}
             </div>
           </div>
+
+          {/* Q-Q Plots */}
+          <div className="glass-card rounded-2xl p-6">
+            <h2 className="text-lg font-semibold mb-4">Q-Q Plots (Normality of Residuals)</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {(['arimax', 'xgboost', 'lstm'] as const).map((model) => {
+                const errKey = `err${model.charAt(0).toUpperCase() + model.slice(1)}` as keyof Prediction;
+                const residuals = data.predictions.map((p) => p[errKey] as number);
+                return (
+                  <QQPlot
+                    key={model}
+                    residuals={residuals}
+                    modelName={MODEL_LABELS[model]}
+                    modelKey={model}
+                  />
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
 
       {/* Breakdown Tab */}
       {activeTab === 'breakdown' && (
         <div className="space-y-6">
+          {/* Error by Magnitude Bucket */}
+          <div className="glass-card rounded-2xl p-6">
+            <h2 className="text-lg font-semibold mb-4">Error by Actual Return Magnitude</h2>
+            <p className="text-xs text-muted-foreground mb-6 max-w-3xl">
+              Visualisasi ini memecah Mean Absolute Error (MAE) berdasarkan rentang nilai actual return. 
+              Hal ini menunjukkan di kondisi pergerakan pasar apa model memiliki tingkat kesalahan terbesar (misalnya pada pergerakan ekstrem &gt; 2%).
+            </p>
+            <ErrorMagnitudeChart 
+              predictions={data.predictions} 
+              models={[
+                { key: 'errXgboost', label: 'XGBoost', color: MODEL_COLORS.xgboost },
+                { key: 'errLstm', label: 'LSTM', color: MODEL_COLORS.lstm },
+                { key: 'errArimax', label: 'ARIMAX', color: MODEL_COLORS.arimax },
+              ]}
+            />
+          </div>
+
           {/* Quarterly Breakdown */}
           <div className="glass-card rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Quarterly Performance</h2>
