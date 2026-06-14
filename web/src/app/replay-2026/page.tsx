@@ -177,6 +177,11 @@ export default function Replay2026Page() {
               {/* Timeline Chart */}
               <div className="glass-card rounded-2xl p-6">
                 <h2 className="text-lg font-semibold mb-4">Actual vs Predicted — 2026</h2>
+                <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-6">
+                  <p className="text-sm text-foreground/90 leading-relaxed">
+                    <span className="font-semibold text-primary">💡 Insight Analitis:</span> Evaluasi out-of-sample berkelanjutan ini berfungsi sebagai sistem peringatan dini (early warning). Karena model tidak dilatih ulang (no retraining), pelebaran jarak antara garis Prediksi dan Aktual pada minggu-minggu volatil memberikan bukti empiris mengenai terjadinya "concept drift"—di mana hubungan historis antara indikator makroekonomi dan harga emas mulai memudar akibat pergeseran kondisi fundamental pasar.
+                  </p>
+                </div>
                 <p className="text-xs text-muted-foreground mb-4">
                   XGBoost and LSTM predictions for 5-day gold return. Click any point to drill down.
                 </p>

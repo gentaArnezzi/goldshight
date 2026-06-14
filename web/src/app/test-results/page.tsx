@@ -270,12 +270,22 @@ export default function TestResultsPage() {
           {/* Error Distribution */}
           <div className="glass-card rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Error Distribution</h2>
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-6">
+              <p className="text-sm text-foreground/90 leading-relaxed">
+                <span className="font-semibold text-primary">💡 Insight Analitis:</span> Distribusi eror XGBoost dan LSTM lebih mengerucut di sekitar angka nol dibandingkan ARIMAX. Ini membuktikan bahwa model ML jauh lebih konsisten menghasilkan eror kecil secara rata-rata. Namun, ketiga model memiliki ekor yang panjang (heavy tails), menegaskan bahwa semua model kesulitan memprediksi secara akurat anomali pergerakan ekstrem.
+              </p>
+            </div>
             <ErrorDistribution predictions={data.predictions} />
           </div>
 
           {/* Direction Accuracy */}
           <div className="glass-card rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Direction Accuracy</h2>
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-6">
+              <p className="text-sm text-foreground/90 leading-relaxed">
+                <span className="font-semibold text-primary">💡 Insight Analitis:</span> Meskipun model ML menang telak dalam meminimalkan magnitudo eror (MAE), Akurasi Arah (DA) XGBoost sebesar 65% sesungguhnya disebabkan oleh rasio prediksi positifnya yang mencapai 98.4%. Ini berarti XGBoost hampir selalu memprediksi harga akan naik karena target didominasi nilai positif. Fakta ini membuktikan bahwa memprediksi arah pergerakan harian yang pasti tetap sangat sulit dilakukan.
+              </p>
+            </div>
             <DirectionAccuracy
               data={[
                 { model: 'XGBoost', da: data.metrics.xgboost.da, label: 'XGBoost' },
@@ -290,6 +300,11 @@ export default function TestResultsPage() {
           {/* Residual Plots */}
           <div className="glass-card rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Residual vs Predicted</h2>
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-6">
+              <p className="text-sm text-foreground/90 leading-relaxed">
+                <span className="font-semibold text-primary">💡 Insight Analitis:</span> Sebaran titik menunjukkan pola korelasi negatif yang tipis. Artinya, model cenderung meremehkan (underestimate) saat return aktual melonjak tajam positif, dan melebih-lebihkan (overestimate) saat return aktual anjlok tajam. Ini adalah bias struktural di mana model bermain aman dengan memprediksi nilai yang konservatif guna meminimalkan penalti fungsi loss (RMSE/MAE).
+              </p>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {(['arimax', 'xgboost', 'lstm'] as const).map((model) => {
                 const predKey = `pred${model.charAt(0).toUpperCase() + model.slice(1)}` as keyof Prediction;
@@ -313,6 +328,11 @@ export default function TestResultsPage() {
           {/* Q-Q Plots */}
           <div className="glass-card rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Q-Q Plots (Normality of Residuals)</h2>
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-6">
+              <p className="text-sm text-foreground/90 leading-relaxed">
+                <span className="font-semibold text-primary">💡 Insight Analitis:</span> Penyimpangan titik-titik pada ujung ekor dari garis diagonal merah membuktikan bahwa eror model tidak berdistribusi normal murni (terdapat kurtosis berlebih/anomali ekstrem). Fenomena ini melanggar asumsi dasar dari pemodelan regresi linear klasik, yang sekaligus menjelaskan mengapa algoritma ML non-linear (XGBoost/LSTM) mampu mencetak performa MAE yang jauh lebih baik daripada model linear ARIMAX.
+              </p>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {(['arimax', 'xgboost', 'lstm'] as const).map((model) => {
                 const errKey = `err${model.charAt(0).toUpperCase() + model.slice(1)}` as keyof Prediction;
@@ -363,6 +383,11 @@ export default function TestResultsPage() {
           {/* Monthly Error Heatmap */}
           <div className="glass-card rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Monthly MAE Heatmap</h2>
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-6">
+              <p className="text-sm text-foreground/90 leading-relaxed">
+                <span className="font-semibold text-primary">💡 Insight Analitis:</span> Kinerja model tidak merata sepanjang waktu. Blok warna yang lebih gelap (MAE tinggi) bergerombol pada bulan-bulan tertentu dengan volatilitas tinggi. Ini memperkuat kesimpulan bahwa model prediksi return sangat rentan terhadap perubahan rezim pasar dan guncangan makroekonomi tak terduga.
+              </p>
+            </div>
             <MonthlyHeatmap predictions={data.predictions} />
           </div>
         </div>
