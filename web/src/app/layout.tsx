@@ -30,8 +30,8 @@ export const metadata: Metadata = {
     "LSTM",
     "machine learning",
     "time series forecasting",
-    "thesis",
-    "GLD",
+    "gold futures",
+    "GC=F",
   ],
   authors: [{ name: "Afzie Muhammad Nurlan & Irgya Genta Arnezzi" }],
   openGraph: {

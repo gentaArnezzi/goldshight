@@ -29,10 +29,11 @@ export default function AboutPage() {
           </p>
 
           <p>
-            The study employs a <strong className="text-foreground">walk-forward validation</strong> framework 
-            (specifically for ARIMAX) and a fixed train-test split for Machine Learning models on
-            daily data spanning January 2010 to December 2025. The data is divided into training (2010–2022),
-            validation (2023), and test (2024–2025) periods, with 503 test observations.
+            The study uses daily data spanning January 2010 to December 2025, divided chronologically into
+            training (2010–2022), validation (2023), and test (2024–2025) periods, with 503 test observations.
+            All three models share this chronological split. ARIMAX is re-estimated at each step via an
+            <strong className="text-foreground">expanding walk-forward</strong> scheme, while XGBoost and LSTM
+            are trained once on the combined train+validation set and predict the entire test period statically.
           </p>
 
           <p>
@@ -81,12 +82,27 @@ export default function AboutPage() {
             {
               title: 'Walk-Forward Asymmetry',
               description:
-                'ARIMAX is re-estimated at each step, while XGBoost and LSTM use fixed models trained on the training set. This gives ARIMAX an adaptive advantage but also makes direct comparison less straightforward.',
+                'ARIMAX is re-estimated at each step via expanding walk-forward, while XGBoost and LSTM use fixed models trained once. This asymmetry favors ARIMAX, making the finding that ML models still outperform it a conservative (not inflated) conclusion.',
+            },
+            {
+              title: 'Directional Accuracy Can Mislead',
+              description:
+                'XGBoost achieves the highest DA (65%) but predicts positive direction 98.4% of the time. In a test period dominated by positive returns (65.4%), high DA does not necessarily reflect balanced directional skill.',
             },
             {
               title: 'No Transaction Costs',
               description:
                 'The evaluation considers prediction accuracy only, not practical trading profitability after accounting for transaction costs, slippage, and market impact.',
+            },
+            {
+              title: 'Ablation ≠ Causation',
+              description:
+                'Ablation study results indicate predictive contribution within the specific model, data, and period — not causal relationships between macroeconomic variables and gold returns.',
+            },
+            {
+              title: 'Conservative Predictions',
+              description:
+                'All models produce predictions far smoother than actual values, with systematic under-prediction bias during the bullish test period. They capture general tendencies but fail to track extreme movements consistently.',
             },
             {
               title: 'Horizon Specificity',
@@ -149,7 +165,7 @@ export default function AboutPage() {
             icon={Code2}
             title="GitHub Repository"
             description="Source code and data pipeline"
-            href="https://github.com"
+            href="https://github.com/gentaArnezzi/goldshight"
             external
           />
           <LinkCard

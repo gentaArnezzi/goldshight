@@ -153,16 +153,25 @@ export default function Replay2026Page() {
                         </div>
                         <div className="grid grid-cols-3 gap-4">
                           <div>
-                            <div className="text-xs text-muted-foreground mb-1">MAE</div>
+                            <div className="text-xs text-muted-foreground mb-1">MAE 2026</div>
                             <div className="text-sm font-mono">{formatDecimal(oos2026.mae)}</div>
+                            <div className="text-[10px] text-muted-foreground/60 mt-1">
+                              Test: {formatDecimal(testSet.metrics[model].mae)}
+                            </div>
                           </div>
                           <div>
-                            <div className="text-xs text-muted-foreground mb-1">RMSE</div>
+                            <div className="text-xs text-muted-foreground mb-1">RMSE 2026</div>
                             <div className="text-sm font-mono">{formatDecimal(oos2026.rmse)}</div>
+                            <div className="text-[10px] text-muted-foreground/60 mt-1">
+                              Test: {formatDecimal(testSet.metrics[model].rmse)}
+                            </div>
                           </div>
                           <div>
-                            <div className="text-xs text-muted-foreground mb-1">DA</div>
+                            <div className="text-xs text-muted-foreground mb-1">DA 2026</div>
                             <div className="text-sm font-mono">{formatPercent(oos2026.da, 1)}</div>
+                            <div className="text-[10px] text-muted-foreground/60 mt-1">
+                              Test: {formatPercent(testSet.metrics[model].da, 1)}
+                            </div>
                           </div>
                         </div>
                         <div className="text-[10px] text-muted-foreground mt-3">

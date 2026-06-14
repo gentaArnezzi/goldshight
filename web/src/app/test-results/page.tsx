@@ -287,13 +287,8 @@ export default function TestResultsPage() {
               </p>
             </div>
             <DirectionAccuracy
-              data={[
-                { model: 'XGBoost', da: data.metrics.xgboost.da, label: 'XGBoost' },
-                { model: 'LSTM', da: data.metrics.lstm.da, label: 'LSTM' },
-                { model: 'ARIMAX', da: data.metrics.arimax.da, label: 'ARIMAX' },
-                { model: 'persistence', da: data.metrics.persistenceBenchmark.da, label: 'Persistence' },
-                { model: 'zero', da: data.metrics.zeroBenchmark.da, label: 'Zero' },
-              ]}
+              predictions={data.predictions}
+              metrics={data.metrics}
             />
           </div>
 
