@@ -339,7 +339,10 @@ export default function TestResultsPage() {
             <h2 className="text-lg font-semibold mb-4">Error by Actual Return Magnitude</h2>
             <p className="text-xs text-muted-foreground mb-6 max-w-3xl">
               Visualisasi ini memecah Mean Absolute Error (MAE) berdasarkan rentang nilai actual return. 
-              Hal ini menunjukkan di kondisi pergerakan pasar apa model memiliki tingkat kesalahan terbesar (misalnya pada pergerakan ekstrem &gt; 2%).
+              Hal ini menunjukkan di kondisi pergerakan pasar apa model memiliki tingkat kesalahan terbesar (misalnya pada pergerakan ekstrem &gt; 2%).<br/>
+              <span className="text-[10px] text-muted-foreground/80 mt-2 block">
+                * (n=...) pada sumbu-X menunjukkan jumlah observasi/sampel uji untuk masing-masing rentang pergerakan.
+              </span>
             </p>
             <ErrorMagnitudeChart 
               predictions={data.predictions} 
