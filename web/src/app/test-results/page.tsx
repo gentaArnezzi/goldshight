@@ -609,7 +609,10 @@ function MonthlyHeatmap({ predictions }: { predictions: Prediction[] }) {
 
   return (
     <div className="overflow-x-auto">
-      <div className="grid grid-cols-[80px_repeat(auto-fill,minmax(60px,1fr))] gap-1">
+      <div 
+        className="grid gap-1 min-w-max"
+        style={{ gridTemplateColumns: `80px repeat(${heatmapData.length}, minmax(60px, 1fr))` }}
+      >
         {/* Header */}
         <div className="text-xs text-muted-foreground font-medium py-2" />
         {heatmapData.map((d) => (
