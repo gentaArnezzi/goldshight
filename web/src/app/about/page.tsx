@@ -164,12 +164,12 @@ export default function AboutPage() {
             icon={Mail}
             title="Contact"
             description="Research inquiries"
-            href="mailto:ji@example.com"
+            href="mailto:irgya.arnezzi@binus.ac.id"
           />
           <LinkCard
             icon={ExternalLink}
             title="Data Source"
-            description="Yahoo Finance (GLD, DX-Y.NYB, ^GSPC, CL=F, ^TNX, ^VIX)"
+            description="Yahoo Finance (GC=F, DX-Y.NYB, ^GSPC, CL=F, ^TNX, ^VIX)"
             href="https://finance.yahoo.com"
             external
           />

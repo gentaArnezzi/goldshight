@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "thesis",
     "GLD",
   ],
-  authors: [{ name: "Ji" }],
+  authors: [{ name: "Afzie Muhammad Nurlan & Irgya Genta Arnezzi" }],
   openGraph: {
     title: "GoldSight — Gold Return Prediction Dashboard",
     description:

@@ -23,9 +23,9 @@ export default function Footer() {
             <span>Thesis Research Dashboard</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>© {new Date().getFullYear()} Ji</span>
+            <span>© {new Date().getFullYear()} Afzie M. Nurlan & Irgya G. Arnezzi</span>
             <span>·</span>
-            <span>Computer Science</span>
+            <span>Binus University</span>
           </div>
         </div>
       </div>
